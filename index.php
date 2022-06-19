@@ -14,9 +14,13 @@ if (isset($_POST['send'])) {
         $errors .= 'Por favor complete todos los campos. <br>';
     } else {
         if (!empty($email)) {
-            $email = trim($email);
+            $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors .= 'Por favor ingresa un correo válido. <br>';
+            }
         } else {
-            $errors .= 'Por favor ingrese su correo. <br>';
+            $errors .= 'Por favor ingresa su correo. <br>';
         }
         if (!empty($subject)) {
             $subject = trim($subject);
@@ -36,7 +40,7 @@ if (isset($_POST['send'])) {
         $result->bind_param('sss', $email, $subject, $message);
         $result->execute();
         $sent = true;
-        $time = 5;
+        $time = 30;
 
         header("Refresh: $time");
     }
@@ -639,7 +643,7 @@ if (isset($_POST['send'])) {
 
                     <div class="contact__data">
                         <div class="contact__information">
-                            <h3 class="contact__subtitle">Número de contacto</h3>
+                            <h3 class="contact__subtitle">Dirección del local</h3>
                             <span class="contact__description">
                                 <i class="ri-map-pin-line contact__icon"></i>
                                 Calle Esteban Giles 196 - Los Olivos
@@ -670,29 +674,31 @@ if (isset($_POST['send'])) {
                     <div class="contact__inputs">
                         <div class="contact__content">
                             <input name="email" type="email" placeholder=" " class="contact__input" value="<?php if (!$sent && isset($email)) { echo $email; } ?>" autocomplete="off">
-                            <label for="" class="contact__label">Correo</label>
+                            <label for="" class="contact__label">Correo<span class="contact__asterisk"> *</span></label>
                         </div>
 
                         <div class="contact__content">
                             <input name="subject" type="text" placeholder=" " class="contact__input" value="<?php if (!$sent && isset($subject)) { echo $subject; } ?>" autocomplete="off">
-                            <label for="" class="contact__label">Asunto</label>
+                            <label for="" class="contact__label">Asunto<span class="contact__asterisk"> *</span></label>
                         </div>
 
                         <div class="contact__content contact__area">
-                            <textarea name="message" placeholder=" " class="contact__input" autocomplete="off"><?php if (!$sent && isset($name)) { echo $message; } ?></textarea>
-                            <label for="" class="contact__label">Mensaje</label>
+                            <textarea name="message" placeholder=" " class="contact__input" autocomplete="off"><?php if (!$sent && isset($message)) { echo $message; } ?></textarea>
+                            <label for="" class="contact__label">Mensaje<span class="contact__asterisk"> *</span></label>
                         </div>
                     </div>
 
                     <?php if (!empty($errors)) : ?>
                         <div class="alert error">
-                    <?php echo $errors; ?>
-                    </div>
+                            <?php echo $errors; ?>
+                        </div>
+                        <br>
                     <?php elseif ($sent) : ?>
                         <div class="alert success">
-                            <h4 style="margin: 0;font-size: 1.7rem; line-height: 1.5em;">¡Gracias por reservar una visita para conocer el nuevo Jorge Chávez!</h4>
-                                <p style="margin: 0; line-height: 1.5em;">Nuestro equipo se contactará contigo para confirmar la cita.</p>
+                            <p style="margin: 0; line-height: 1.5em;">¡Gracias por enviar tu mensaje!</p>
+                                <p style="margin: 0; line-height: 1.5em;">Nuestro equipo se contactará pronto.</p>
                         </div>
+                        <br>
                     <?php endif; ?>
 
                     <button name="send" class="button button--flex" type="submit">
@@ -734,34 +740,34 @@ if (isset($_POST['send'])) {
                     <h3 class="footer__subtitle">Servicios</h3>
                     <ul>
                         <li class="footer__item">
-                            <p class="footer__link">> Cámaras de seguridad</p>
+                            <p class="footer__link-services">> Cámaras de seguridad</p>
                         </li>
                         <li class="footer__item">
-                            <p class="footer__link">> Alarmas contra incendios</p>
+                            <p class="footer__link-services">> Alarmas contra incendios</p>
                         </li>
                         <li class="footer__item">
-                            <p class="footer__link">> Alarmas contra robos</p>
+                            <p class="footer__link-services">> Alarmas contra robos</p>
                         </li>
                         <li class="footer__item">
-                            <p class="footer__link">> Alarmas comunitarias</p>
+                            <p class="footer__link-services">> Alarmas comunitarias</p>
                         </li>
                         <li class="footer__item">
-                            <p class="footer__link">> Cercos eléctricos</p>
+                            <p class="footer__link-services">> Cercos eléctricos</p>
                         </li>
                         <li class="footer__item">
-                            <p class="footer__link">> Control de acceso</p>
+                            <p class="footer__link-services">> Control de acceso</p>
                         </li>
                         <li class="footer__item">
-                            <p class="footer__link">> Videoportero digital</p>
+                            <p class="footer__link-services">> Videoportero digital</p>
                         </li>
                         <li class="footer__item">
-                            <p class="footer__link">> Intercomunicador digital</p>
+                            <p class="footer__link-services">> Intercomunicador digital</p>
                         </li>
                         <li class="footer__item">
-                            <p class="footer__link">> Electricidad residencial</p>
+                            <p class="footer__link-services">> Electricidad residencial</p>
                         </li>
                         <li class="footer__item">
-                            <p class="footer__link">> Electricidad industrial</p>
+                            <p class="footer__link-services">> Electricidad industrial</p>
                         </li>
                     </ul>
                 </div>

@@ -804,6 +804,10 @@ input {
   font-family: var(--body-font);
 }
 
+.contact__asterisk {
+  color: red;
+}
+
 .contact__label {
   position: absolute;
   top: .75rem;
@@ -836,6 +840,22 @@ input {
   top: -.75rem;
   font-size: var(--smaller-font-size);
   z-index: 10;
+}
+
+/*=============== CONTACT errors ===============*/
+/* Errores */
+.alert {
+  color: white;
+  font-size: var(--small-font-size);
+  font-weight: bold;
+}
+
+.alert.error {
+  color: #e11f26;
+}
+
+.alert.success {
+  color: #4f9c4f;
 }
 
 /*=============== FOOTER ===============*/
@@ -892,6 +912,10 @@ footer {
 }
 
 .footer__web-link:hover {
+  color: var(--text-color);
+}
+
+.footer__link-services {
   color: var(--text-color);
 }
 
