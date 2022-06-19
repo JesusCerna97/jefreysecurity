@@ -1,6 +1,46 @@
 <?php
 
+require "./functions/database.php";
 
+$sent = "";
+$errors = "";
+
+if (isset($_POST['send'])) {
+    $email = $_POST['email'];
+    $subject = $_POST['subject'];
+    $message = $_POST['message'];
+
+    if (empty($email) && empty($subject) && empty($message)) {
+        $errors .= 'Por favor complete todos los campos. <br>';
+    } else {
+        if (!empty($email)) {
+            $email = trim($email);
+        } else {
+            $errors .= 'Por favor ingrese su correo. <br>';
+        }
+        if (!empty($subject)) {
+            $subject = trim($subject);
+        } else {
+            $errors .= 'Por favor ingrese su asunto. <br>';
+        }
+        if (!empty($message)) {
+            $message = trim($message);
+        } else {
+            $errors .= 'Por favor ingrese su mensaje. <br>';
+        }
+    }
+
+    if (!$errors) {
+        $query = "INSERT INTO mail (email, subject, message) VALUES (?, ?, ?)";
+        $result = mysqli_prepare($connection, $query);
+        $result->bind_param('sss', $email, $subject, $message);
+        $result->execute();
+        $sent = true;
+        $time = 5;
+
+        header("Refresh: $time");
+    }
+}
 
 ?>
 
@@ -626,23 +666,34 @@
                     </div>
                 </div>
 
-                <form action="" class="contact__form">
+                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="contact__form">
                     <div class="contact__inputs">
                         <div class="contact__content">
-                            <input name="email" type="email" placeholder=" " class="contact__input" required>
+                            <input name="email" type="email" placeholder=" " class="contact__input" value="<?php if (!$sent && isset($email)) { echo $email; } ?>" autocomplete="off">
                             <label for="" class="contact__label">Correo</label>
                         </div>
 
                         <div class="contact__content">
-                            <input name="subject" type="text" placeholder=" " class="contact__input" required>
+                            <input name="subject" type="text" placeholder=" " class="contact__input" value="<?php if (!$sent && isset($subject)) { echo $subject; } ?>" autocomplete="off">
                             <label for="" class="contact__label">Asunto</label>
                         </div>
 
                         <div class="contact__content contact__area">
-                            <textarea name="message" placeholder=" " class="contact__input"></textarea>
+                            <textarea name="message" placeholder=" " class="contact__input" autocomplete="off"><?php if (!$sent && isset($name)) { echo $message; } ?></textarea>
                             <label for="" class="contact__label">Mensaje</label>
                         </div>
                     </div>
+
+                    <?php if (!empty($errors)) : ?>
+                        <div class="alert error">
+                    <?php echo $errors; ?>
+                    </div>
+                    <?php elseif ($sent) : ?>
+                        <div class="alert success">
+                            <h4 style="margin: 0;font-size: 1.7rem; line-height: 1.5em;">¡Gracias por reservar una visita para conocer el nuevo Jorge Chávez!</h4>
+                                <p style="margin: 0; line-height: 1.5em;">Nuestro equipo se contactará contigo para confirmar la cita.</p>
+                        </div>
+                    <?php endif; ?>
 
                     <button name="send" class="button button--flex" type="submit">
                         Enviar Mensaje
