@@ -737,7 +737,7 @@ if (isset($_POST['send'])) {
                     <?php elseif ($sent) : ?>
                         <div class="alert success">
                             <p style="margin: 0; line-height: 1.5em;">¡Gracias por enviar tu mensaje!</p>
-                                <p style="margin: 0; line-height: 1.5em;">Nuestro equipo se contactará pronto.</p>
+                            <p style="margin: 0; line-height: 1.5em;">Nuestro equipo se contactará pronto.</p>
                         </div>
                         <br>
                     <?php endif; ?>
