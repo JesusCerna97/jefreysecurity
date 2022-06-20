@@ -75,7 +75,7 @@ if (isset($_POST['send'])) {
 <body>
     <header class="header" id="header">
         <nav class="nav container">
-            <a href="#" class="nav__logo">JEFREYSECURITY</a>
+            <a href="https://www.jefreysecurity.com/ " class="nav__logo">JEFREYSECURITY</a>
 
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">

@@ -2,9 +2,9 @@
 
 $database = [
     'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'database' => 'contact_security',
+    'username' => 'jefferse_security',
+    'password' => 'vHa8Ifv1PAMN',
+    'database' => 'jefferse_security',
 ];
 
 $connection = mysqli_connect($database['hostname'], $database['username'], $database['password'], $database['database']) or die('Error al conectar con la base de datos.');
