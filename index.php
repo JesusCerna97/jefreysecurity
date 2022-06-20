@@ -1,5 +1,15 @@
 <?php
 
+//Import PHPMailer classes into the global namespace
+//These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require "./PHPMailer-master/src/Exception.php";
+require "./PHPMailer-master/src/PHPMailer.php";
+require "./PHPMailer-master/src/SMTP.php";
+
 require "./functions/database.php";
 
 $sent = "";
@@ -39,10 +49,41 @@ if (isset($_POST['send'])) {
         $result = mysqli_prepare($connection, $query);
         $result->bind_param('sss', $email, $subject, $message);
         $result->execute();
-        $sent = true;
-        $time = 30;
 
-        header("Refresh: $time");
+        //Create an instance; passing `true` enables exceptions
+        $mail = new PHPMailer(true);
+
+        try {
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_OFF;                 //Enable verbose debug output
+            $mail->isSMTP();                                    //Send using SMTP
+            $mail->Host       = 'mail.jefreysecurity.com';      //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                           //Enable SMTP authentication
+            $mail->Username   = 'info@jefreysecurity.com';      //SMTP username
+            $mail->Password   = 'Rafaela270122*';               //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;    //Enable implicit TLS encryption
+            $mail->Port       = 465;                            //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+            //Recipients
+            $mail->setFrom('no-reply@jefreysecurity.com', 'No Reply');
+            $mail->addAddress('info@jefreysecurity.com', 'Info');       //Add a recipient
+            $mail->addAddress('ventas@jefreysecurity.com', 'Ventas');   //Name is optional
+
+            //Content
+            $mail->isHTML(true);                                        //Set email format to HTML
+            $mail->Subject = $subject;
+            $mail->Body    = "<p>correo: $email</p>
+            <p>mensaje: $message</p>";
+
+            $mail->send();
+            // echo 'Message has been sent';
+            $sent = true;
+            $time = 30;
+
+            header("Refresh: $time");
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
     }
 }
 
