@@ -110,6 +110,28 @@ if (isset($_POST['send'])) {
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="assets/css/styles.css">
 
+    <!--=============== JQUERY ===============-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.js" integrity="sha512-HNbo1d4BaJjXh+/e6q4enTyezg5wiXvY3p/9Vzb20NIvkJghZxhzaXeffbdJuuZSxFhJP87ORPadwmU9aN3wSA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!--=============== GOOGLE reCAPTCHA ===============-->
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfCBIYgAAAAABUqMqz0BpDKdzeD3P5-4R8tLj0b"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#send').click(function() {
+                grecaptcha.ready(function() {
+                    grecaptcha.execute('6LfCBIYgAAAAABUqMqz0BpDKdzeD3P5-4R8tLj0b', {
+                        action: 'submit'
+                    }).then(function(token) {
+                        $('#form_contact').prepend('<input type="hidden" name="token" value="' + token +'" >');
+                        $('#form_contact').prepend('<input type="hidden" name="action" value="submit" >');
+                        $('#form_contact').submit();
+                    });
+                });
+            })
+        })
+    </script>
+
     <title>WEB JEFREYSECURITY | Página profesional en seguridad electrónica</title>
 </head>
 
@@ -711,20 +733,26 @@ if (isset($_POST['send'])) {
                     </div>
                 </div>
 
-                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="contact__form">
+                <form id="form_contact" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="contact__form">
                     <div class="contact__inputs">
                         <div class="contact__content">
-                            <input name="email" type="email" placeholder=" " class="contact__input" value="<?php if (!$sent && isset($email)) { echo $email; } ?>" autocomplete="off">
+                            <input name="email" type="email" placeholder=" " class="contact__input" value="<?php if (!$sent && isset($email)) {
+                                                                                                                echo $email;
+                                                                                                            } ?>" autocomplete="off">
                             <label for="" class="contact__label">Correo<span class="contact__asterisk"> *</span></label>
                         </div>
 
                         <div class="contact__content">
-                            <input name="subject" type="text" placeholder=" " class="contact__input" value="<?php if (!$sent && isset($subject)) { echo $subject; } ?>" autocomplete="off">
+                            <input name="subject" type="text" placeholder=" " class="contact__input" value="<?php if (!$sent && isset($subject)) {
+                                                                                                                echo $subject;
+                                                                                                            } ?>" autocomplete="off">
                             <label for="" class="contact__label">Asunto<span class="contact__asterisk"> *</span></label>
                         </div>
 
                         <div class="contact__content contact__area">
-                            <textarea name="message" placeholder=" " class="contact__input" autocomplete="off"><?php if (!$sent && isset($message)) { echo $message; } ?></textarea>
+                            <textarea name="message" placeholder=" " class="contact__input" autocomplete="off"><?php if (!$sent && isset($message)) {
+                                                                                                                    echo $message;
+                                                                                                                } ?></textarea>
                             <label for="" class="contact__label">Mensaje<span class="contact__asterisk"> *</span></label>
                         </div>
                     </div>
@@ -742,7 +770,7 @@ if (isset($_POST['send'])) {
                         <br>
                     <?php endif; ?>
 
-                    <button name="send" class="button button--flex" type="submit">
+                    <button id="send" name="send" class="button button--flex" type="submit">
                         Enviar Mensaje
                         <i class="ri-arrow-right-up-line button__icon"></i>
                     </button>
