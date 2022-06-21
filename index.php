@@ -18,7 +18,6 @@ $errors = "";
 define('CLAVE', '6LfCBIYgAAAAAHvuBi39xiy7aAOmjRXOG_dELR2U');
 
 // verificar la respuesta
-
 if (isset($_POST['send'])) {
     $email = $_POST['email'];
     $subject = $_POST['subject'];
