@@ -927,13 +927,13 @@ footer {
   color: var(--title-color);
 }
 
-.footer__cards{
+.footer__cards {
   display: inline-flex;
   align-items: center;
   column-gap: .5rem;
 }
 
-.footer__card{
+.footer__card {
   width: 35px;
 }
 

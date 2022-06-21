@@ -15,10 +15,27 @@ require "./functions/database.php";
 $sent = "";
 $errors = "";
 
+define('CLAVE', '6LfCBIYgAAAAAHvuBi39xiy7aAOmjRXOG_dELR2U');
+
+// verificar la respuesta
+
 if (isset($_POST['send'])) {
     $email = $_POST['email'];
     $subject = $_POST['subject'];
     $message = $_POST['message'];
+
+    $token = $_POST['token'];
+    $action = $_POST['action'];
+
+    $cu = curl_init();
+    curl_setopt($cu, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+    curl_setopt($cu, CURLOPT_POST, 1);
+    curl_setopt($cu, CURLOPT_POSTFIELDS, http_build_query(array('secret' => CLAVE, 'response' => $token)));
+    curl_setopt($cu, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($cu);
+    curl_close($cu);
+
+    $arrResponse = json_decode($response, true);
 
     if (empty($email) && empty($subject) && empty($message)) {
         $errors .= 'Por favor complete todos los campos. <br>';
@@ -41,6 +58,17 @@ if (isset($_POST['send'])) {
             $message = trim($message);
         } else {
             $errors .= 'Por favor ingrese su mensaje. <br>';
+        }
+        if (!empty($message)) {
+            $message = trim($message);
+        } else {
+            $errors .= 'Por favor ingrese su mensaje. <br>';
+        }
+        if ($arrResponse["success"] == '1' && $arrResponse["action"] == $action && $arrResponse["score"] >= 0.5) {
+            // Si entra aqui, es un humano, puedes procesar el formulario
+            echo "ok!, eres un humano";
+        } else {
+            echo "no eres humano";
         }
     }
 
@@ -87,6 +115,8 @@ if (isset($_POST['send'])) {
     }
 }
 
+/*print_r($datos);*/
+
 ?>
 
 <!DOCTYPE html>
@@ -111,7 +141,7 @@ if (isset($_POST['send'])) {
     <link rel="stylesheet" href="assets/css/styles.css">
 
     <!--=============== JQUERY ===============-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.js" integrity="sha512-HNbo1d4BaJjXh+/e6q4enTyezg5wiXvY3p/9Vzb20NIvkJghZxhzaXeffbdJuuZSxFhJP87ORPadwmU9aN3wSA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.js" integrity="sha512-1lagjLfnC1I0iqH9plHYIUq3vDMfjhZsLy9elfK89RBcpcRcx4l+kRJBSnHh2Mh6kLxRHoObD1M5UTUbgFy6nA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!--=============== GOOGLE reCAPTCHA ===============-->
     <script src="https://www.google.com/recaptcha/api.js?render=6LfCBIYgAAAAABUqMqz0BpDKdzeD3P5-4R8tLj0b"></script>
@@ -123,7 +153,7 @@ if (isset($_POST['send'])) {
                     grecaptcha.execute('6LfCBIYgAAAAABUqMqz0BpDKdzeD3P5-4R8tLj0b', {
                         action: 'submit'
                     }).then(function(token) {
-                        $('#form_contact').prepend('<input type="hidden" name="token" value="' + token +'" >');
+                        $('#form_contact').prepend('<input type="hidden" name="token" value="' + token + '" >');
                         $('#form_contact').prepend('<input type="hidden" name="action" value="submit" >');
                         $('#form_contact').submit();
                     });
@@ -762,7 +792,7 @@ if (isset($_POST['send'])) {
                             <?php echo $errors; ?>
                         </div>
                         <br>
-                    <?php elseif ($sent) : ?>
+                    <?php elseif ($sent == true) : ?>
                         <div class="alert success">
                             <p style="margin: 0; line-height: 1.5em;">¡Gracias por enviar tu mensaje!</p>
                             <p style="margin: 0; line-height: 1.5em;">Nuestro equipo se contactará pronto.</p>

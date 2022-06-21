@@ -1,6 +1,11 @@
 <?php
 
 $database = [
+    // 'hostname' => 'localhost',
+    // 'username' => 'jefferse_security',
+    // 'password' => 'vHa8Ifv1PAMN',
+    // 'database' => 'jefferse_security',
+
     'hostname' => 'localhost',
     'username' => 'jefferse_security',
     'password' => 'vHa8Ifv1PAMN',
