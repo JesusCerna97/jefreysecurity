@@ -58,11 +58,6 @@ if (isset($_POST['send'])) {
         } else {
             $errors .= 'Por favor ingrese su mensaje. <br>';
         }
-        if (!empty($message)) {
-            $message = trim($message);
-        } else {
-            $errors .= 'Por favor ingrese su mensaje. <br>';
-        }
         if ($arrResponse["success"] == '1' && $arrResponse["action"] == $action && $arrResponse["score"] >= 0.5) {
             // Si entra aqui, es un humano, puedes procesar el formulario
             echo "ok!, eres un humano";
