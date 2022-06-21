@@ -905,7 +905,7 @@ if (isset($_POST['send'])) {
             <div class="footer__rights">
                 <p class="footer__copy">&#169; <?php echo date('Y'); ?> <a href="https://www.jefreysecurity.com/" class="footer__copy-link">JEFREYSECURITY</a>. All rigths reserved.</p>
                 <div class="footer__terms">
-                    <p class="footer__terms-link">Creado por <a href="https://www.strongerpage.com" class="footer__web-link">STRONGERPAGE</a></p>
+                    <p class="footer__terms-link">Creado por <a href="https://www.strongerpage.com/" class="footer__web-link">STRONGERPAGE</a></p>
                 </div>
             </div>
         </div>
